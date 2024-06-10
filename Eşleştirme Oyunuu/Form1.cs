@@ -14,22 +14,38 @@ namespace Eşleştirme_Oyunuu
     {
         List<string> icons = new List<string>()
         {
-            "a","b","c","d","e","f","g","h",
-            "a","b","c","d","e","f","g","h"
+            "a","b",
+            "a","b",
         };
         Random rdn = new Random();
         int randomindex;
         Timer t1 = new Timer();
         Timer t2 = new Timer();
+        Timer gameTimer=new Timer();
+        int elapsedTime = 0;
+
         Button first, second;
         public Form1()
         {
             InitializeComponent();
+            InitializeGameTimer();
             t1.Tick += T_Tick;
             t1.Start();
             t1.Interval = 3000;
             show();
             t2.Tick += T2_Tick;
+        }
+        private void InitializeGameTimer()
+        {
+            gameTimer.Interval = 1000;
+            gameTimer.Tick += GameTimer_Tick;
+            
+
+        }
+        private void GameTimer_Tick(object sender, EventArgs e)
+        {
+            elapsedTime++;
+            
         }
         private void T2_Tick(object sender, EventArgs e)
         {
@@ -48,6 +64,7 @@ namespace Eşleştirme_Oyunuu
             {
                 item.ForeColor = item.BackColor;
             }
+            gameTimer.Start();
         }
 
 
@@ -69,12 +86,14 @@ namespace Eşleştirme_Oyunuu
             }
         }
         int sayac = 0;
+
         private void Buton(object sender, EventArgs e)
         {
             Button btn = sender as Button;
             if (first == null)
             {
-                first = btn; first.ForeColor = Color.Black;
+                first = btn; 
+                first.ForeColor = Color.Black;
                 return;
 
             }
@@ -86,9 +105,12 @@ namespace Eşleştirme_Oyunuu
                 second.ForeColor = Color.Black;
                 first = null;
                 second = null;
-                if (sayac == 8)
+                sayac++;
+                if (sayac == 2)
                 {
-                    MessageBox.Show("Bütün ikonları eşleştirdiniz :)", "Tebrikler");
+                    gameTimer.Stop();
+                    MessageBox.Show($"Bütün ikonları eşleştirdiniz :) Süre:{elapsedTime} saniye", "Tebrikler");
+                    Close();
                 }
 
             }
